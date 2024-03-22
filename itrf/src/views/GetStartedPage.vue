@@ -65,10 +65,12 @@
         </p>
         <br />
         <h2>Taxes filed for {{ incomeTaxReturnYear }}</h2>
-        <p>
+        <p id="hasFiledIncomeTaxReturn">
           <b>Have you filed your {{ incomeTaxReturnYear }} income tax return with the CRA?</b>
         </p>
         <Radio
+          label=''
+          aria-labelledby="hasFiledIncomeTaxReturn"
           id="filed-income-tax-return"
           v-model="hasFiledIncomeTaxReturn"
           name="filed-income-tax-return"
@@ -104,8 +106,10 @@
           </ErrorBox>
         </div>
         <br />
-        <p><b>Do you have a spouse or common-law partner?</b></p>
+        <p id="hasSpouse"><b>Do you have a spouse or common-law partner?</b></p>
         <Radio
+          label=''
+          aria-labelledby="hasSpouse"
           id="spouse"
           v-model="hasSpouse"
           name="spouse"
@@ -122,10 +126,12 @@
         </div>
         <br />
         <div v-if="hasSpouse === 'Y'" class="ml-4 mb-0">
-          <p>
+          <p id="hasSpouseFiledIncomeTaxReturn">
             <b>Have they filed their {{ incomeTaxReturnYear }} income tax return with the CRA?</b>
           </p>
           <Radio
+            label=''
+            aria-labelledby="hasSpouseFiledIncomeTaxReturn"
             id="spouse-filed-income-tax-return"
             v-model="hasSpouseFiledIncomeTaxReturn"
             name="spouse-filed-income-tax-return"
