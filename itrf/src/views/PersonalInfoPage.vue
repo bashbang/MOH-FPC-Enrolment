@@ -2,7 +2,7 @@
   <div>
     <ProgressBar :routes="stepRoutes" :current-path="$route.path" />
     <PageContent>
-      <div class="container pt-3 pt-sm-5 mb-5">
+      <main class="container pt-3 pt-sm-5 mb-5">
         <h1>Personal Information</h1>
         <hr />
         <p>Enter your name as it appears on your driver's licence, 
@@ -11,7 +11,7 @@
           <div class="col-sm-7">
             <InputComponent
               v-model="firstName"
-              :label="'First name'"
+              label="First name"
               :class-name="'mt-3'"
               :input-style="mediumStyles"
               :required="true"
@@ -40,7 +40,7 @@
             </div>
             <InputComponent
               v-model="lastName"
-              :label="'Last name'"
+              label="Last name"
               :class-name="'mt-3'"
               :input-style="mediumStyles"
               :required="true"
@@ -124,6 +124,7 @@
             <PhnInput
               v-model="phn"
               label="Personal Health Number (PHN)"
+              name="Personal Health Number (PHN)"
               class="mt-3"
               placeholder="1111 111 111"
               :input-style="smallStyles"
@@ -195,14 +196,14 @@
                 <div class="bcid-image-container">
                   <img
                     src="../images/bcid-sample-front.png"
-                    alt="BC Services Card sample front"
+                    alt=""
                     class="bcid"
                   />
                 </div>
                 <div class="bcid-image-container">
                   <img
                     src="../images/bcid-sample-back.png"
-                    alt="BC Services Card sample back"
+                    alt=""
                     class="bcid"
                   />
                 </div>
@@ -210,7 +211,7 @@
             </TipBox>
           </div>
         </div>
-      </div>
+      </main>
     </PageContent>
     <ContinueBar
       :button-label="'Submit'"

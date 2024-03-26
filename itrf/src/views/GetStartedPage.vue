@@ -3,7 +3,7 @@
     <ConsentModal v-if="showConsentModal" @close="handleCloseConsentModal" />
     <ProgressBar :routes="stepRoutes" :current-path="$route.path" />
     <PageContent>
-      <div class="container pt-3 pt-sm-5 mb-5">
+      <main class="container pt-3 pt-sm-5 mb-5">
         <h1>Get started</h1>
         <hr />
         <h2>Welcome</h2>
@@ -167,7 +167,7 @@
             </ErrorBox>
           </div>
         </div>
-      </div>
+      </main>
     </PageContent>
     <ContinueBar
       :button-label="'Continue'"
