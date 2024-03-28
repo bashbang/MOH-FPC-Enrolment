@@ -35,8 +35,8 @@
         <hr />
         <p><b>Print or save this page for your records.</b></p>
         <p>
-          We will verify your income with the CRA. Please allow two to three 
-          weeks for delivery of your Confirmation of Fair PharmaCare Assistance 
+          We will verify your income with the CRA. Please allow two to three
+          weeks for delivery of your Confirmation of Fair PharmaCare Assistance
           letter. This letter will have your deductible and family maximum for
           {{ yearSubmitted }}.
         </p>
@@ -56,12 +56,9 @@ import SuccessBox from "../components/SuccessBox.vue";
 import { formatDate, formatDateDisplay } from "../helpers/date.js";
 import pageStateService from "../services/page-state-service.js";
 import { routes } from "../router/index.js";
-import { 
-  scrollTo
-} from "../helpers/scroll";
-import {
-  RESET_FORM
-} from '../store/index.js';
+import { scrollTo } from "../helpers/scroll";
+import { RESET_FORM } from "../store/index.js";
+import logService from "../services/log-service.js";
 
 export default {
   name: "DeclarationPage",
@@ -130,12 +127,18 @@ export default {
     this.dateSubmitted = formatDate(new Date());
     this.yearSubmitted = new Date().getFullYear();
     this.referenceNumber = this.$store.state.referenceNumber;
+
+    logService.logNavigation(
+      this.$store.state.applicationUuid,
+      routes.SUBMISSION.path,
+      routes.SUBMISSION.title,
+    );
   },
   methods: {
     printPage() {
       window.print();
     },
-  }
+  },
 };
 </script>
 
