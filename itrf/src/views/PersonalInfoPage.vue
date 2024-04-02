@@ -5,8 +5,10 @@
       <main class="container pt-3 pt-sm-5 mb-5">
         <h1>Personal Information</h1>
         <hr />
-        <p>Enter your name as it appears on your driver's licence, 
-          BC Services Card or CareCard.</p>
+        <p>
+          Enter your name as it appears on your driver's licence, BC Services
+          Card or CareCard.
+        </p>
         <div class="row">
           <div class="col-sm-7">
             <InputComponent
@@ -189,7 +191,9 @@
                 <a
                   href="https://www2.gov.bc.ca/gov/content/health/health-drug-coverage/msp/bc-residents/personal-health-identification/your-bc-services-card"
                   target="_blank"
-                  >BC Services Card</a>
+                >
+                  BC Services Card
+                </a>
                 or CareCard.
               </p>
               <div class="bcid-container">
@@ -253,16 +257,13 @@ import {
   SET_PHN,
   SET_REFERENCE_NUMBER,
 } from "../store";
-import { 
+import {
   scrollTo,
   scrollToError,
-  getTopScrollPosition
+  getTopScrollPosition,
 } from "../helpers/scroll";
-import {
-  stepRoutes,
-  routes,
-  isPastPath,
-} from "../router/index.js";
+import { stepRoutes, routes, isPastPath } from "../router/index.js";
+import logService from "../services/log-service.js";
 
 export default {
   name: "PersonalInfoPage",
@@ -279,7 +280,10 @@ export default {
   // Required in order to block back navigation.
   beforeRouteLeave(to, from, next) {
     pageStateService.setPageIncomplete(from.path);
-    if ((pageStateService.isPageComplete(to.path)) || isPastPath(to.path, from.path)){
+    if (
+      pageStateService.isPageComplete(to.path) ||
+      isPastPath(to.path, from.path)
+    ) {
       next();
     } else {
       // Navigate to self.
@@ -287,7 +291,7 @@ export default {
       const toPath = routes.PERSONAL_INFO.path;
       next({
         path: toPath,
-        replace: true
+        replace: true,
       });
       setTimeout(() => {
         scrollTo(topScrollPosition);
@@ -310,6 +314,7 @@ export default {
       isLoading: false,
       isAPIValidationErrorShown: false,
       isSystemUnavailable: false,
+      applicationUuid: null,
     };
   },
   created() {
@@ -318,6 +323,13 @@ export default {
     this.birthdate = this.$store.state.birthdate;
     this.phn = this.$store.state.phn;
     this.token = this.$store.state.captchaToken;
+    this.applicationUuid = this.$store.state.applicationUuid;
+
+    logService.logNavigation(
+      this.$store.state.applicationUuid,
+      routes.PERSONAL_INFO.path,
+      routes.PERSONAL_INFO.title,
+    );
   },
   validations() {
     const validations = {
@@ -368,38 +380,38 @@ export default {
           // Handle HTTP success.
           const returnCode = response.data.returnCode;
 
-          this.isLoading = false;
-          
           switch (returnCode) {
             case "success": // Validation success.
-              // logService.logInfo(applicationUuid, {
-              //     event: 'validation success (validatePhnName)',
-              //     response: response.data,
-              // });
+              logService.logInfo(this.applicationUuid, {
+                event: "validation success (validatePerson)",
+                response: response.data,
+              });
               this.handleValidationSuccess(formState);
               break;
-            case "failure": // PHN does not match with the lastname.
+            case "failure": // PHN does not match name.
               this.isAPIValidationErrorShown = true;
-              // logService.logInfo(applicationUuid, {
-              //     event: 'validation failure (validatePerson)',
-              //     response: response.data,
-              // });
+              logService.logInfo(this.applicationUuid, {
+                event: "validation failure (validatePerson)",
+                response: response.data,
+              });
               scrollToError();
               break;
             case "3": // System unavailable.
               this.isSystemUnavailable = true;
-              // logService.logError(applicationUuid, {
-              //     event: 'validation failure (validatePerson endpoint unavailable)',
-              //     response: response.data,
-              // });
+              logService.logError(this.applicationUuid, {
+                event:
+                  "validation failure (validatePerson endpoint unavailable)",
+                response: response.data,
+              });
               scrollToError();
               break;
             default: //-1 error code, schema error, etc
               this.isSystemUnavailable = true;
-              // logService.logError(applicationUuid, {
-              //     event: 'validation failure (schema error or other unexpected problem)',
-              //     response: response.data,
-              // });
+              logService.logError(this.applicationUuid, {
+                event:
+                  "validation failure (validatePerson schema error or other unexpected problem)",
+                response: response.data,
+              });
               scrollToError();
           }
         })
@@ -407,10 +419,10 @@ export default {
           // Handle HTTP error.
           this.isLoading = false;
           this.isSystemUnavailable = true;
-          // logService.logError(applicationUuid, {
-          //     event: 'HTTP error (validatePhnName endpoint unavailable)',
-          //     status: error.response.status,
-          // });
+          logService.logError(this.applicationUuid, {
+            event: "HTTP error (validatePerson endpoint unavailable)",
+            status: error.response.status,
+          });
           scrollToError();
         });
     },
@@ -427,34 +439,39 @@ export default {
 
           switch (returnCode) {
             case "success": // Submit form success.
-              // logService.logInfo(applicationUuid, {
-              //     event: 'submission success (submitForm)',
-              //     response: response.data,
-              // });
+              logService.logSubmission(
+                this.applicationUuid,
+                {
+                  event: "submission success (submitForm)",
+                  response: response.data,
+                },
+                response.data.refNumber,
+              );
               this.handleSubmitForm();
               break;
-            case "failure": // PHN does not match with the lastname.
+            case "failure": // API error
               this.isAPIValidationErrorShown = true;
-              // logService.logInfo(applicationUuid, {
-              //     event: 'validation failure (validatePerson)',
-              //     response: response.data,
-              // });
+              logService.logError(this.applicationUuid, {
+                event: "validation failure (submitForm)",
+                response: response.data,
+              });
               scrollToError();
               break;
             case "3": // System unavailable.
               this.isSystemUnavailable = true;
-              // logService.logError(applicationUuid, {
-              //     event: 'validation failure (validatePerson endpoint unavailable)',
-              //     response: response.data,
-              // });
+              logService.logError(this.applicationUuid, {
+                event: "validation failure (submitForm endpoint unavailable)",
+                response: response.data,
+              });
               scrollToError();
               break;
             default: //-1 error code, schema error, etc
               this.isSystemUnavailable = true;
-              // logService.logError(applicationUuid, {
-              //     event: 'validation failure (schema error or other unexpected problem)',
-              //     response: response.data,
-              // });
+              logService.logError(this.applicationUuid, {
+                event:
+                  "validation failure (submitForm schema error or other unexpected problem)",
+                response: response.data,
+              });
               scrollToError();
           }
         })
@@ -462,10 +479,10 @@ export default {
           // Handle HTTP error.
           this.isLoading = false;
           this.isSystemUnavailable = true;
-          // logService.logError(applicationUuid, {
-          //     event: 'HTTP error (validatePhnName endpoint unavailable)',
-          //     status: error.response.status,
-          // });
+          logService.logError(this.applicationUuid, {
+            event: "HTTP error (submitForm endpoint unavailable)",
+            status: error.response.status,
+          });
           scrollToError();
         });
     },
@@ -489,7 +506,7 @@ export default {
       this.isAPIValidationErrorShown = false;
       this.isSystemUnavailable = false;
     },
-  }
+  },
 };
 </script>
 
