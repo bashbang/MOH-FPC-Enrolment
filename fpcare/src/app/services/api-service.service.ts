@@ -38,13 +38,6 @@ export class ApiService extends AbstractHttpService {
   public setCaptchaToken(token: string){
     this._token = token;
     this._headers = this._headers.set('X-Authorization', `Bearer ${this._token}`);
-
-    if (!environment.production) {
-      console.log('ApiService token set:', {
-        token: this._token,
-        headers: this._headers
-      });
-    }
   }
 
   /**
