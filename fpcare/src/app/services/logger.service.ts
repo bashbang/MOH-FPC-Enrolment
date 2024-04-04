@@ -87,11 +87,6 @@ export class Logger extends AbstractHttpService {
     const url = environment.loggingURL;
     const body = { message: message };
 
-    if (environment.logHTTPRequestsToConsole){
-      console.log('header: ', this._headers );
-      console.log('Log Message', message);
-    }
-
     if (environment.enableLogging){
       // We call .subscribe() here because we don't care about the response and
       // we want to ensure that we never forget to call subscribe.
