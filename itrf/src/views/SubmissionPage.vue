@@ -1,7 +1,7 @@
 <template>
   <div>
     <PageContent>
-      <div class="container pt-3 pt-sm-5 mb-5">
+      <main class="container pt-3 pt-sm-5 mb-5">
         <div class="row align-items-end mt-3">
           <div class="col-9">
             <h1 class="mb-0">Confirmation of submission</h1>
@@ -44,7 +44,7 @@
 
         <h2>Personal information</h2>
         <ReviewTable :elements="personalInfoData" />
-      </div>
+      </main>
     </PageContent>
   </div>
 </template>
