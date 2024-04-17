@@ -14,6 +14,7 @@
             <InputComponent
               v-model="firstName"
               label="First name"
+              aria-label="First name"
               id="first-name"
               :class-name="'mt-3'"
               :input-style="mediumStyles"
@@ -44,6 +45,7 @@
             <InputComponent
               v-model="lastName"
               label="Last name"
+              aria-label="Last name"
               id="last-name"
               :class-name="'mt-3'"
               :input-style="mediumStyles"
@@ -75,6 +77,7 @@
               id="birthdate"
               v-model="birthdate"
               label="Birthdate"
+              aria-label="Birthdate"
               class-name="mt-3"
               :required="true"
               :watch-for-model-change="true"
@@ -128,6 +131,7 @@
             <PhnInput
               v-model="phn"
               label="Personal Health Number (PHN)"
+              aria-label="Personal Health Number (PHN)"
               id="personal-health-number"
               class="mt-3"
               placeholder="1111 111 111"
