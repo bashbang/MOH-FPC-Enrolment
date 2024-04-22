@@ -21,6 +21,7 @@
               :required="true"
               cypress-id="firstName"
               @input="handleAPIValidationReset"
+              @blur="handleBlurField(v$.firstName)"
             />
             <div
               v-if="v$.firstName.$dirty && v$.firstName.required.$invalid"
@@ -52,6 +53,7 @@
               :required="true"
               cypress-id="lastName"
               @input="handleAPIValidationReset"
+              @blur="handleBlurField(v$.lastName)"
             />
             <div
               v-if="v$.lastName.$dirty && v$.lastName.required.$invalid"
@@ -85,6 +87,7 @@
               cypress-id="birthdate"
               @input="handleAPIValidationReset"
               @process-date="handleProcessBirthdate($event)"
+              @blur="handleBlurField(v$.birthdate)"
             />
             <div
               v-if="
@@ -139,6 +142,7 @@
               :required="true"
               cypress-id="phn"
               @input="handleAPIValidationReset"
+              @blur="handleBlurField(v$.phn)"
             />
             <div
               v-if="v$.phn.$dirty && v$.phn.required.$invalid"
